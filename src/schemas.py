@@ -68,3 +68,9 @@ class AirQualityReading(BaseModel):
         if v not in POLLUTANT_MAP.values():
             raise ValueError(f"Contaminante no monitorizado: {v}")
         return v
+
+class AirStation(BaseModel):
+    station_code: str
+    name: str
+    latitude: float = Field(ge=40.0, le=41.0)
+    longitude: float = Field(ge=-4.2, le=-3.3)
