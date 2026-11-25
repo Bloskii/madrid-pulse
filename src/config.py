@@ -19,7 +19,7 @@ class Settings:
     )
 
     # Configuración de peticiones HTTP
-    HTTP_TIMEOUT: float = float(os.getenv("HTTP_TIMEOUT", "15.0"))
+    HTTP_TIMEOUT: float = float(os.getenv("HTTP_TIMEOUT", "35.0"))
     USER_AGENT: str = "MadridPulse-DataPipeline/1.0 (UPM-Student-Portfolio)"
 
     # Parámetros geoespaciales y de negocio
