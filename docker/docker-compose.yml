@@ -1,0 +1,46 @@
+services:
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.2.8
+    container_name: madrid-pulse-redpanda
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      - --advertise-pandaproxy-addr internal://redpanda:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
+      - --smp 1
+      - --memory 512M
+      - --mode dev-container
+    ports:
+      - "19092:19092"   # Puerto Kafka para conectar nuestros scripts Python desde Windows
+      - "9644:9644"     # Admin API
+
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:v2.7.2
+    container_name: madrid-pulse-console
+    depends_on:
+      - redpanda
+    ports:
+      - "8080:8080"     # Interfaz web visual para ver tus mensajes en tiempo real
+    environment:
+      KAFKA_BROKERS: redpanda:9092
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: madrid-pulse-db
+    environment:
+      POSTGRES_USER: madrid_user
+      POSTGRES_PASSWORD: madrid_password
+      POSTGRES_DB: madrid_pulse
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  timescale_data:
