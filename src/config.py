@@ -32,7 +32,7 @@ class Settings:
     TOPIC_AIR_QUALITY: str = "air_quality.raw"
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
-        "postgresql://madrid_user:madrid_password@localhost:5432/madrid_pulse",
+        "postgresql://madrid_user:madrid_password@localhost:5433/madrid_pulse",
     )
 
 
